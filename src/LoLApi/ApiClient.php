@@ -9,7 +9,9 @@ use LoLApi\Api\ChampionApi;
 use LoLApi\Api\CurrentGameApi;
 use LoLApi\Api\FeaturedGamesApi;
 use LoLApi\Api\GameApi;
+use LoLApi\Api\LeagueApi;
 use LoLApi\Api\MatchApi;
+use LoLApi\Api\MatchHistoryApi;
 use LoLApi\Api\MatchListApi;
 use LoLApi\Api\StaticDataApi;
 use LoLApi\Api\StatsApi;
@@ -24,6 +26,8 @@ use LoLApi\Result\ApiResult;
  */
 class ApiClient
 {
+    const TTL       = 86400;
+
     const REGION_BR = 'br';
     const REGION_EUNE = 'eune';
     const REGION_EUW = 'euw';
@@ -134,9 +138,25 @@ class ApiClient
     /**
      * @return MatchListApi
      */
+    public function getLeagueApi()
+    {
+        return new LeagueApi($this);
+    }
+
+    /**
+     * @return MatchListApi
+     */
     public function getMatchListApi()
     {
         return new MatchListApi($this);
+    }
+
+    /**
+     * @return MatchHistoryApi
+     */
+    public function getMatchHistoryApi()
+    {
+        return new MatchHistoryApi($this);
     }
 
     /**
@@ -231,7 +251,7 @@ class ApiClient
      * @param ApiResult $apiResult
      * @param int       $ttl
      */
-    public function cacheApiResult(ApiResult $apiResult, $ttl = 60)
+    public function cacheApiResult(ApiResult $apiResult, $ttl = self::TTL)
     {
         $this->cacheProvider->save($apiResult->getUrl(), json_encode($apiResult->getResult()), $ttl);
     }

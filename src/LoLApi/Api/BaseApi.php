@@ -49,7 +49,10 @@ abstract class BaseApi
         try {
             $response = $this->apiClient->getHttpClient()->get($url, ['query' => $queryParameters]);
 
-            return $this->buildApiResult($fullUrl, json_decode((string) $response->getBody(), true), false, $response);
+            $r_	= $this->buildApiResult($fullUrl, json_decode((string) $response->getBody(), true), false, $response);
+            $this->apiClient->cacheApiResult($r_);
+            return	$r_;
+
         } catch (ClientException $e) {
             throw (new ClientExceptionHandler())->handleClientException($e);
         }
