@@ -20,11 +20,23 @@ class CurrentGameApi extends BaseApi
      *
      * @return ApiResult
      */
-    public function getCurrentGameByPlatformIdAndSummonerId($platformId, $summonerId)
+    public function getCurrentGameByPlatformIdAndSummonerId($summonerId)
     {
-        $url = str_replace('{platformId}', $platformId, self::API_URL_CURRENT_GAME_BY_SUMMONER_ID);
-        $url = str_replace('{summonerId}', $summonerId, $url);
+		$pi	= array(
+			'na'	=> 'NA1',
+			'euw'	=> 'EUW1',
+			'eune'	=> 'EUN1',
+			'kr'	=> 'KR',
+			'oce'	=> 'OC1',
+			'br'	=> 'BR1',
+			'lan'	=> 'LA1',
+			'las'	=> 'LA2',
+			'ru'	=> 'RU',
+			'tr'	=> 'TR1',
+			'pbe'	=> 'PBE1');
 
+        $url = str_replace('{platformId}', $pi[ $this->apiClient->getRegion() ], self::API_URL_CURRENT_GAME_BY_SUMMONER_ID);
+        $url = str_replace('{summonerId}', $summonerId, $url);
         return $this->callApiUrl($url, []);
     }
 }
